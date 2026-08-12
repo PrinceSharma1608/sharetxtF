@@ -15,14 +15,6 @@
       <div class="logo-icon">ST</div>
       <span class="logo-text">ShareTXT</span>
     </a>
-    <div class="header-actions">
-      <button class="btn-icon" id="btn-settings" title="Backend API Settings">
-        <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path>
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
-        </svg>
-      </button>
-    </div>
   </header>
 
   <!-- Main Container -->
@@ -91,50 +83,52 @@
           </div>
         </div>
 
-        <!-- Input Area -->
-        <div class="textbox-wrapper">
-          <textarea 
-            class="text-input" 
-            id="send-text-input" 
-            placeholder="Type or paste your text here (up to 4,999 characters)..."
-            maxlength="4999"
-          ></textarea>
-          
-          <div class="textbox-footer">
-            <div class="textbox-tools">
-              <button class="btn-tool" id="btn-paste-send">
-                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
-                </svg>
-                <span>Paste</span>
-              </button>
-              <button class="btn-tool" id="btn-clear-send">
-                <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
-                </svg>
-                <span>Clear</span>
-              </button>
-            </div>
+        <form class="send-input-form" id="send-form" onsubmit="return false;">
+          <!-- Input Area -->
+          <div class="textbox-wrapper">
+            <textarea 
+              class="text-input" 
+              id="send-text-input" 
+              placeholder="Type or paste your text here (up to 4,999 characters)..."
+              maxlength="4999"
+            ></textarea>
             
-            <div class="char-counter" id="char-counter-wrapper">
-              <span id="char-count">0</span> / 4999 chars
+            <div class="textbox-footer">
+              <div class="textbox-tools">
+                <button type="button" class="btn-tool" id="btn-paste-send">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"></path>
+                  </svg>
+                  <span>Paste</span>
+                </button>
+                <button type="button" class="btn-tool" id="btn-clear-send">
+                  <svg width="14" height="14" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path>
+                  </svg>
+                  <span>Clear</span>
+                </button>
+              </div>
+              
+              <div class="char-counter" id="char-counter-wrapper">
+                <span id="char-count">0</span> / 4999 chars
+              </div>
             </div>
           </div>
-        </div>
 
-        <button class="btn-primary btn-send" id="btn-submit-send">
-          <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
-          </svg>
-          <span id="send-btn-text">Generate Code & Send</span>
-        </button>
+          <button type="submit" class="btn-primary btn-send" id="btn-submit-send">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path>
+            </svg>
+            <span id="send-btn-text">Generate Code & Send</span>
+          </button>
+        </form>
 
         <!-- Code Result View (Shown on Successful API Response) -->
         <div class="code-result-container" id="send-result-card" style="display: none;">
           <div class="code-title">Your Retrieval Code</div>
           <div class="code-display-wrapper">
             <div class="code-display" id="generated-code">------</div>
-            <button class="btn-copy-code" id="btn-copy-code" title="Copy Code">
+            <button type="button" class="btn-copy-code" id="btn-copy-code" title="Copy Code">
               <svg width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
               </svg>
@@ -163,7 +157,7 @@
     <section class="screen" id="screen-receive">
       <div class="view-card">
         <div class="view-header">
-          <button class="btn-back" id="btn-back-receive">
+          <button type="button" class="btn-back" id="btn-back-receive">
             <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
             </svg>
@@ -188,7 +182,7 @@
             />
           </div>
 
-          <button class="btn-primary btn-receive" id="btn-submit-receive">
+          <button type="submit" class="btn-primary btn-receive" id="btn-submit-receive">
             <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path>
             </svg>
@@ -207,7 +201,7 @@
                 </svg>
                 <span>Text Fetched Successfully</span>
               </div>
-              <button class="btn-tool" id="btn-copy-received" title="Copy Text">
+              <button type="button" class="btn-tool" id="btn-copy-received" title="Copy Text">
                 <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z"></path>
                 </svg>
@@ -241,21 +235,6 @@
   <footer class="footer">
     <p>&copy; 2026 ShareTXT. End-to-End Encrypted Ephemeral Text Transfer.</p>
   </footer>
-
-  <!-- API Settings Modal -->
-  <div class="modal-overlay" id="modal-settings">
-    <div class="modal-card">
-      <h3 class="modal-title">Backend API Settings</h3>
-      <p style="font-size: 0.9rem; color: var(--text-muted); line-height: 1.5;">
-        Specify the Spring Boot API base URL (e.g. <code>http://localhost:8080/transfer</code>).
-      </p>
-      <input type="text" class="modal-input" id="api-url-input" value="http://localhost:8080/transfer" placeholder="http://localhost:8080/transfer" />
-      <div style="display: flex; gap: 0.75rem; justify-content: flex-end;">
-        <button class="btn-back" id="btn-close-modal">Cancel</button>
-        <button class="btn-primary btn-send" id="btn-save-settings" style="width: auto; padding: 0.6rem 1.25rem; font-size: 0.9rem;">Save Base URL</button>
-      </div>
-    </div>
-  </div>
 
   <!-- Toast Notification Container -->
   <div class="toast-container" id="toast-container"></div>

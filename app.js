@@ -38,27 +38,15 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnCopyReceived = document.getElementById('btn-copy-received');
   const receiveErrorBox = document.getElementById('receive-error-box');
 
-  // DOM Elements - Settings Modal & Toast
-  const btnSettings = document.getElementById('btn-settings');
-  const modalSettings = document.getElementById('modal-settings');
-  const apiUrlInput = document.getElementById('api-url-input');
-  const btnCloseModal = document.getElementById('btn-close-modal');
-  const btnSaveSettings = document.getElementById('btn-save-settings');
+  // DOM Elements - Toast
   const toastContainer = document.getElementById('toast-container');
 
-  // App State - Spring Boot Endpoint: /transfer
-  let rawApiUrl = localStorage.getItem('sharetxt_api_url') || 'http://sharetxtb.railway.internal/transfer';
+  // App State - Fixed Spring Boot Endpoint: /transfer
+  const API_URL = 'http://sharetxtb.railway.internal/transfer';
   
-  // Helper to ensure the base URL points to the backend /transfer mapping
   function getTransferEndpoint() {
-    let url = rawApiUrl.trim().replace(/\/+$/, '');
-    if (!url.endsWith('/transfer')) {
-      url += '/transfer';
-    }
-    return url;
+    return API_URL;
   }
-
-  apiUrlInput.value = rawApiUrl;
 
   // Navigation Logic
   function showScreen(screenToShow) {
@@ -84,22 +72,6 @@ document.addEventListener('DOMContentLoaded', () => {
   logoBtn.addEventListener('click', (e) => {
     e.preventDefault();
     showScreen(screenSelection);
-  });
-
-  // Settings Modal Logic
-  btnSettings.addEventListener('click', () => modalSettings.classList.add('active'));
-  btnCloseModal.addEventListener('click', () => modalSettings.classList.remove('active'));
-  modalSettings.addEventListener('click', (e) => {
-    if (e.target === modalSettings) modalSettings.classList.remove('active');
-  });
-
-  btnSaveSettings.addEventListener('click', () => {
-    let url = apiUrlInput.value.trim();
-    if (!url) url = 'http://sharetxtb.railway.internal/transfer';
-    rawApiUrl = url;
-    localStorage.setItem('sharetxt_api_url', rawApiUrl);
-    modalSettings.classList.remove('active');
-    showToast('Backend API URL updated: ' + getTransferEndpoint(), 'success');
   });
 
   // Character Counter & Max Length Enforcement (4,999 Chars)
@@ -137,8 +109,16 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast('Text area cleared', 'success');
   });
 
+  // Request Locks & State Flags
+  let isSending = false;
+  let isReceiving = false;
+
+  const sendForm = document.getElementById('send-form');
+
   // SEND FLOW: Hit POST /transfer?text={text} -> Display Code & Instructions
-  btnSubmitSend.addEventListener('click', async () => {
+  async function handleSend() {
+    if (isSending) return;
+
     const textValue = sendTextInput.value.trim();
 
     if (!textValue) {
@@ -147,6 +127,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    isSending = true;
     setButtonLoading(btnSubmitSend, sendBtnText, 'Sending...');
     sendResultCard.style.display = 'none';
 
@@ -175,7 +156,28 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Send Error:', error);
       showToast(`API Error: ${error.message}`, 'error');
     } finally {
+      isSending = false;
       resetButtonLoading(btnSubmitSend, sendBtnText, 'Generate Code & Send');
+    }
+  }
+
+  if (sendForm) {
+    sendForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      handleSend();
+    });
+  } else {
+    btnSubmitSend.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleSend();
+    });
+  }
+
+  // Support Ctrl+Enter shortcut in textarea to send text
+  sendTextInput.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'Enter') {
+      e.preventDefault();
+      handleSend();
     }
   });
 
@@ -190,6 +192,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // RECEIVE FLOW: Hit GET /transfer?i={code} -> Display Text or "Data not found"
   async function handleReceive() {
+    if (isReceiving) return;
+
     const code = receiveCodeInput.value.trim();
 
     if (!code) {
@@ -198,6 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
       return;
     }
 
+    isReceiving = true;
     setButtonLoading(btnSubmitReceive, receiveBtnText, 'Fetching...');
     receiveResultCard.style.display = 'none';
     receiveSuccessBox.style.display = 'none';
@@ -237,6 +242,7 @@ document.addEventListener('DOMContentLoaded', () => {
       console.error('Receive Error:', error);
       showReceiveError();
     } finally {
+      isReceiving = false;
       resetButtonLoading(btnSubmitReceive, receiveBtnText, 'Fetch Text');
     }
   }
@@ -248,7 +254,6 @@ document.addEventListener('DOMContentLoaded', () => {
     showToast('Data not found', 'error');
   }
 
-  btnSubmitReceive.addEventListener('click', handleReceive);
   receiveForm.addEventListener('submit', (e) => {
     e.preventDefault();
     handleReceive();
