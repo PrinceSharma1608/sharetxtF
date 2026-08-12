@@ -47,7 +47,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const toastContainer = document.getElementById('toast-container');
 
   // App State - Spring Boot Endpoint: /transfer
-  let rawApiUrl = localStorage.getItem('sharetxt_api_url') || 'http://localhost:8080/transfer';
+  let rawApiUrl = localStorage.getItem('sharetxt_api_url') || 'http://sharetxtb.railway.internal/transfer';
   
   // Helper to ensure the base URL points to the backend /transfer mapping
   function getTransferEndpoint() {
@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   btnSaveSettings.addEventListener('click', () => {
     let url = apiUrlInput.value.trim();
-    if (!url) url = 'http://localhost:8080/transfer';
+    if (!url) url = 'http://sharetxtb.railway.internal/transfer';
     rawApiUrl = url;
     localStorage.setItem('sharetxt_api_url', rawApiUrl);
     modalSettings.classList.remove('active');
@@ -154,9 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const endpoint = getTransferEndpoint();
       // Spring Boot Backend Controller API mapping:
       // @PostMapping("/transfer") public String data(@RequestParam String text)
-      const postUrl = `${endpoint}?text=${encodeURIComponent(textValue)}`;
-
-      const response = await fetch(postUrl, {
+      const response = await fetch(endpoint, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/x-www-form-urlencoded;charset=UTF-8'
