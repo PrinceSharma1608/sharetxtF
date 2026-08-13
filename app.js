@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const toastContainer = document.getElementById('toast-container');
 
   // App State - Fixed Spring Boot Endpoint: /transfer
-  const API_URL = 'http://sharetxtb-production.up.railway.app/transfer';
+  const API_URL = 'https://sharetxtb-production.up.railway.app/transfer';
   
   function getTransferEndpoint() {
     return API_URL;
